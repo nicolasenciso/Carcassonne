@@ -9,6 +9,8 @@ import javax.imageio.*;
 public class MenuGUI extends JPanel implements ActionListener {
     private static MenuGUI menu;
     private static int defaultSizeBoard = 11;
+    private static int defaultCityProb = 20;
+    private static int defaultAbbeyProb = 7;
     private Image backgroundMenuImg;
     final static int originalTileSize = 20;
     final static int scale = 3;
@@ -42,14 +44,14 @@ public class MenuGUI extends JPanel implements ActionListener {
         sizeBoardLabel = new JLabel("Board size");
         addRouteDirection = new JCheckBox("Direction road tiles");
 
-        titleProbs = new JLabel("Probabilities:");
+        titleProbs = new JLabel(" % Probabilities:");
         probAbbLabel = new JLabel("Abbeys:");
         probCityLabel = new JLabel("Cities:");
         probRoadLabel = new JLabel("Roads:");
 
-        probAbbeys = new JTextField();
-        probCities = new JTextField();
-        probRoads = new JTextField();
+        probAbbeys = new JTextField(String.valueOf(defaultAbbeyProb));
+        probCities = new JTextField(String.valueOf(defaultCityProb));
+        probRoads = new JTextField(String.valueOf(100 - (defaultAbbeyProb + defaultCityProb)));
     }
 
     public static MenuGUI getMenuGUI(){
@@ -115,7 +117,7 @@ public class MenuGUI extends JPanel implements ActionListener {
         int yAddRouteDirection = ySizeBoardLabel + tileSize;
         int widthAddRouteDirection = (tileSize * 3) - 19;
 
-        int xProbTitle = (tileSize * 6) + 10;
+        int xProbTitle = (tileSize * 6);
         int yProbTitle = ySizeBoardLabel - 15;
         int widthTitleProbs = widthSizeBoardLabel + tileSize;
 
@@ -161,13 +163,13 @@ public class MenuGUI extends JPanel implements ActionListener {
         add(probCityLabel);
 
         // add probabilities text box
-        probAbbeys.setBounds(xProbTitle + tileSize, yProbTitle + 25, widthSizeBoard - 20, heightSizeBoard - 10);
+        probAbbeys.setBounds(xProbTitle + tileSize, yProbTitle + 25, widthSizeBoard, heightSizeBoard - 10);
         add(probAbbeys);
 
-        probRoads.setBounds(xProbTitle + tileSize, yProbTitle + 55, widthSizeBoard - 20, heightSizeBoard - 10);
+        probRoads.setBounds(xProbTitle + tileSize, yProbTitle + 55, widthSizeBoard, heightSizeBoard - 10);
         add(probRoads);
 
-        probCities.setBounds(xProbTitle + tileSize, yProbTitle + 85, widthSizeBoard - 20, heightSizeBoard - 10);
+        probCities.setBounds(xProbTitle + tileSize, yProbTitle + 85, widthSizeBoard, heightSizeBoard - 10);
         add(probCities);
 
 
