@@ -13,6 +13,7 @@ public class MenuGUI extends JPanel implements ActionListener {
     private static int defaultAbbeyProb = 7;
     private Image backgroundMenuImg;
     final static int originalTileSize = 20;
+    final static String titleName = "CARCASSONNE";
     final static int scale = 3;
     final static int tileSize = originalTileSize * scale;
     final static int maxWidthTiles = 10;
@@ -35,12 +36,12 @@ public class MenuGUI extends JPanel implements ActionListener {
     private MenuGUI(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.white);
-        this.setDoubleBuffered(true);
 
         newGameButton = new JButton("New Game");
         newGameButton.addActionListener(this);
 
         sizeBoardTextField = new JTextField(String.valueOf(defaultSizeBoard));
+
         sizeBoardLabel = new JLabel("Board size");
         addRouteDirection = new JCheckBox("Direction road tiles");
 
@@ -123,7 +124,6 @@ public class MenuGUI extends JPanel implements ActionListener {
 
 
         // add new game button to panel
-        String titleName = "CARCASSONNE";
         setAndAddNewGameButton(xNewGameButton, yNewGameButton, widthNewGameButton, heightNewGameButton, newGameButton);
 
         // add text field for board size
@@ -171,19 +171,21 @@ public class MenuGUI extends JPanel implements ActionListener {
 
         probCities.setBounds(xProbTitle + tileSize, yProbTitle + 85, widthSizeBoard, heightSizeBoard - 10);
         add(probCities);
-
-
     }
 
     // Listener to know what to do when click buttons
     @Override
     public void actionPerformed(ActionEvent e) {
-        JPanel empty = new JPanel();
-        empty.setPreferredSize(new Dimension(screenWidth+100, screenHeight+100));
-        empty.setBackground(Color.BLUE);
-        windowGUI gameWindow = windowGUI.getWindow();
-        gameWindow.remove(this);
-        gameWindow.add(empty);
-        gameWindow.pack();
+
+        if(e.getSource() == newGameButton){
+
+            // TODO: checker 100 for probabilities, till 30 on size board
+
+            BoardGUI.getGameBoard(Integer.parseInt(sizeBoardTextField.getText().trim()),
+                    Integer.parseInt(probAbbeys.getText().trim()),
+                    Integer.parseInt(probCities.getText().trim()),
+                    Integer.parseInt(probRoads.getText().trim()),
+                    addRouteDirection.isSelected());
+        }
     }
 }
