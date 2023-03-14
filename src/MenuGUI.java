@@ -113,7 +113,12 @@ public class MenuGUI extends JPanel implements ActionListener {
         int widthSizeBoardLabel = widthSizeBoard * 2;
 
         int yAddRouteDirection = ySizeBoardLabel + tileSize;
-        int widthAddRouteDirection = tileSize * 3;
+        int widthAddRouteDirection = (tileSize * 3) - 19;
+
+        int xProbTitle = (tileSize * 6) + 10;
+        int yProbTitle = ySizeBoardLabel - 15;
+        int widthTitleProbs = widthSizeBoardLabel + tileSize;
+
 
         // add new game button to panel
         String titleName = "CARCASSONNE";
@@ -141,6 +146,29 @@ public class MenuGUI extends JPanel implements ActionListener {
         addRouteDirection.setBounds(xSizeBoardLabel, yAddRouteDirection, widthAddRouteDirection, heightSizeBoard);
         addRouteDirection.setBackground(new Color(224,224,224, 190));
         add(addRouteDirection);
+
+        // add probabilities title
+        titleProbs.setBounds(xProbTitle, yProbTitle, widthTitleProbs, heightSizeBoard);
+        add(titleProbs);
+
+        probAbbLabel.setBounds(xProbTitle, yProbTitle + 20, widthTitleProbs, heightSizeBoard);
+        add(probAbbLabel);
+
+        probRoadLabel.setBounds(xProbTitle, yProbTitle + 50, widthTitleProbs, heightSizeBoard);
+        add(probRoadLabel);
+
+        probCityLabel.setBounds(xProbTitle, yProbTitle + 80, widthTitleProbs, heightSizeBoard);
+        add(probCityLabel);
+
+        // add probabilities text box
+        probAbbeys.setBounds(xProbTitle + tileSize, yProbTitle + 25, widthSizeBoard - 20, heightSizeBoard - 10);
+        add(probAbbeys);
+
+        probRoads.setBounds(xProbTitle + tileSize, yProbTitle + 55, widthSizeBoard - 20, heightSizeBoard - 10);
+        add(probRoads);
+
+        probCities.setBounds(xProbTitle + tileSize, yProbTitle + 85, widthSizeBoard - 20, heightSizeBoard - 10);
+        add(probCities);
 
 
     }
