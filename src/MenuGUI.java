@@ -180,12 +180,18 @@ public class MenuGUI extends JPanel implements ActionListener {
         if(e.getSource() == newGameButton){
 
             // TODO: checker 100 for probabilities, till 30 on size board
+            int probaAbbey = Integer.parseInt(probAbbeys.getText().trim());
+            int probaCity = Integer.parseInt(probCities.getText().trim());
+            int probaRoad = Integer.parseInt(probRoads.getText().trim());
 
-            BoardGUI.getGameBoard(Integer.parseInt(sizeBoardTextField.getText().trim()),
-                    Integer.parseInt(probAbbeys.getText().trim()),
-                    Integer.parseInt(probCities.getText().trim()),
-                    Integer.parseInt(probRoads.getText().trim()),
-                    addRouteDirection.isSelected());
+            if(probaCity + probaAbbey + probaRoad != 100){
+                JOptionPane.showMessageDialog(null,
+                        "The sum of tile probabilities has to be 100",
+                        "Porbabilities do not sum 100", JOptionPane.ERROR_MESSAGE);
+            }else{
+                BoardGUI.getGameBoard(Integer.parseInt(sizeBoardTextField.getText().trim()),
+                        probaAbbey, probaCity, probaRoad, addRouteDirection.isSelected());
+            }
         }
     }
 }

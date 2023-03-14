@@ -11,6 +11,7 @@ public class BoardGUI extends JPanel implements ActionListener {
 
     private static BoardGUI gameBoard;
     private Image backgroundMenuImg;
+    private BorderLayout screenGrid;
     final static int originalTileSize = 20;
     final static int scale = 3;
     final static int tileSize = originalTileSize * scale;
@@ -33,6 +34,9 @@ public class BoardGUI extends JPanel implements ActionListener {
         screenWidth = (tileSize * boardSize) + (tileSize * 7);
         screenHeight = (tileSize * boardSize) + (tileSize * 5);
 
+        this.screenGrid = new BorderLayout();
+
+
         //TODO: resizable for value size board less 11 increase scale
         // set check tile compatibility on engine module
         // check when the game starts maybe make it in another class like play
@@ -40,6 +44,7 @@ public class BoardGUI extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.white);
         this.setDoubleBuffered(true);
+        setLayout(screenGrid);
 
         windowGUI gameWindow = windowGUI.getWindow();
         gameWindow.remove(MenuGUI.getMenuGUI());
