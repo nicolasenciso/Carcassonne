@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class GameEngine {
@@ -11,6 +12,7 @@ public class GameEngine {
     private static String[] typeRoads = new String[]{"right-left", "up-down", "four-way", "three-way", "corner"};
     private static GameEngine myGameEngine;
     private static JPanel gameGrid;
+    private static JPanel lateralPanel;
     private static int probAbbeys;
     private static int probCities;
     private static int probRoads;
@@ -69,19 +71,23 @@ public class GameEngine {
         for(int i = 0; i < boardSize*boardSize; i++){
             gameGrid.add(new AbbeyTile("abbey", new int[]{1,2}));
         }
-        System.out.println(gameGrid.getComponent(1).getSize());
         boardGame.add(gameGrid, BorderLayout.CENTER);
     }
 
     private void setLateralPanel(){
-
+        lateralPanel = new JPanel();
+        lateralPanel.setBorder(new EmptyBorder(10,10,10,10));
+        lateralPanel.setLayout(new GridLayout(5,1));
+        for(int i = 0; i < 5; i++){
+            lateralPanel.add(new AbbeyTile("abbey", new int[]{1,2}));
+        }
+        boardGame.add(lateralPanel, BorderLayout.EAST);
     }
 
     private void setLayoutWindows(){
         boardGame.add(getEmptyPanel(false), BorderLayout.NORTH);
         boardGame.add(getEmptyPanel(false), BorderLayout.SOUTH);
         boardGame.add(getEmptyPanel(true), BorderLayout.WEST);
-        boardGame.add(getEmptyPanel(true), BorderLayout.EAST);
     }
 
 
