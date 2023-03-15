@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 public class EmptyTile extends Tile{
     public EmptyTile(String typeTile, int[] coords) {
         super(typeTile, coords);
-        this.setBackground(new Color(255,255,255,150));
         try{
             icon = ImageIO.read(new FileInputStream("assets/empty.png"));
             icon = icon.getScaledInstance(tileWidth, tileHeight, Image.SCALE_DEFAULT);

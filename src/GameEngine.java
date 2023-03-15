@@ -70,7 +70,7 @@ public class GameEngine {
         gameGrid = new JPanel();
         gameGrid.setLayout(new GridLayout(boardSize, boardSize));
         for(int i = 0; i < boardSize*boardSize; i++){
-            gameGrid.add(TileGenerator.getTile(typeTiles[0],new int[]{1,1},"" ));
+            gameGrid.add(TileGenerator.getTile(typeTiles[0],new int[]{1,1},false ));
         }
         boardGame.add(gameGrid, BorderLayout.CENTER);
     }
@@ -80,7 +80,7 @@ public class GameEngine {
         lateralPanel.setBorder(new EmptyBorder(10,10,10,10));
         lateralPanel.setLayout(new GridLayout(5,1));
         for(int i = 0; i < 5; i++){
-            lateralPanel.add(TileGenerator.getTile(typeTiles[0],new int[]{1,1},"" ));
+            lateralPanel.add(TileGenerator.getTile(typeTiles[0],new int[]{1,1},false ));
         }
         boardGame.add(lateralPanel, BorderLayout.EAST);
     }
