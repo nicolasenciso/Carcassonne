@@ -13,6 +13,7 @@ public class GameEngine {
     private static GameEngine myGameEngine;
     private static JPanel gameGrid;
     private static JPanel lateralPanel;
+    private static Tile selectedTile;
     private static int probAbbeys;
     private static int probCities;
     private static int probRoads;
@@ -69,7 +70,7 @@ public class GameEngine {
         gameGrid = new JPanel();
         gameGrid.setLayout(new GridLayout(boardSize, boardSize));
         for(int i = 0; i < boardSize*boardSize; i++){
-            gameGrid.add(new AbbeyTile("abbey", new int[]{1,2}));
+            gameGrid.add(TileGenerator.getTile(typeTiles[1],new int[]{1,1},"" ));
         }
         boardGame.add(gameGrid, BorderLayout.CENTER);
     }
@@ -79,7 +80,7 @@ public class GameEngine {
         lateralPanel.setBorder(new EmptyBorder(10,10,10,10));
         lateralPanel.setLayout(new GridLayout(5,1));
         for(int i = 0; i < 5; i++){
-            lateralPanel.add(new AbbeyTile("abbey", new int[]{1,2}));
+            lateralPanel.add(TileGenerator.getTile(typeTiles[1],new int[]{1,1},"" ));
         }
         boardGame.add(lateralPanel, BorderLayout.EAST);
     }

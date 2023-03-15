@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 
+// Factory pattern
 public abstract class Tile extends JButton {
 
+    // TODO: automatic scale of tileSize depending of board size
     public String typeTile;
     public int scale = 5;
     public int tileWidth = 115;
