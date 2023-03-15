@@ -66,6 +66,10 @@ public class GameEngine {
     private void setGameGrid(){
         gameGrid = new JPanel();
         gameGrid.setLayout(new GridLayout(boardSize, boardSize));
+        for(int i = 0; i < boardSize*boardSize; i++){
+            gameGrid.add(new AbbeyTile("abbey", new int[]{1,2}));
+        }
+        System.out.println(gameGrid.getComponent(1).getSize());
         boardGame.add(gameGrid, BorderLayout.CENTER);
     }
 
