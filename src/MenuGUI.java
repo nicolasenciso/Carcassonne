@@ -187,7 +187,7 @@ public class MenuGUI extends JPanel implements ActionListener {
             if(probaCity + probaAbbey + probaRoad != 100){
                 JOptionPane.showMessageDialog(null,
                         "The sum of tile probabilities has to be 100",
-                        "Porbabilities do not sum 100", JOptionPane.ERROR_MESSAGE);
+                        "Probabilities do not sum 100", JOptionPane.ERROR_MESSAGE);
             }else{
                 GameEngine.generateGameEngine().setInitialGameParameters(Integer.parseInt(sizeBoardTextField.getText().trim()),
                         probaAbbey, probaCity, probaRoad, addRouteDirection.isSelected());

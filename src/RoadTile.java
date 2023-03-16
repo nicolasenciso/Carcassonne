@@ -26,6 +26,7 @@ public class RoadTile extends Tile{
     );
     public RoadTile(String typeTile, int[] coords, boolean withDirection) {
         super(typeTile, coords);
+
         if(withDirection){
             // random selection of type road, all same probability
             int randomNumber = new Random().nextInt(Directions.values().size());

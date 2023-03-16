@@ -21,10 +21,6 @@ public class BoardGUI extends JPanel implements ActionListener {
     // No further instances, class only
     private BoardGUI(){
 
-        //TODO: resizable for value size board less 11 increase scale
-        // set check tile compatibility on engine module
-        // check when the game starts maybe make it in another class like play
-
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.white);
         this.setDoubleBuffered(true);

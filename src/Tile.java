@@ -18,4 +18,8 @@ public abstract class Tile extends JButton {
         //this.setBorder(BorderFactory.createEmptyBorder());
     }
 
+    public String getTypeTile(){
+        return this.typeTile;
+    }
+
 }
