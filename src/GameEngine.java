@@ -79,11 +79,18 @@ public class GameEngine {
         int x = 0;
         int y = 0;
         for(int i = 0; i < boardSize*boardSize; i++){
-            if(i==boardSize) {
-                gameGrid.add(TileGenerator.getTile(typeTiles[1], new int[]{1, 1}, addDirectionalRoads));
-            }else{
-                gameGrid.add(TileGenerator.getTile(typeTiles[0], new int[]{1, 1}, addDirectionalRoads));
+
+            if(i % boardSize == 0 && i != 0){
+                y += 1;
+                x = 0;
             }
+            // case middle tile always a four-way road
+            if(x == boardSize/2 && y == boardSize/2){
+                gameGrid.add(TileGenerator.getTile(typeTiles[1], new int[]{x, y}, false));
+            }else{
+                gameGrid.add(TileGenerator.getTile(typeTiles[0], new int[]{x, y}, addDirectionalRoads));
+            }
+            x += 1;
         }
         boardGame.add(gameGrid, BorderLayout.CENTER);
     }
