@@ -42,6 +42,22 @@ public class GameEngine {
         return myGameEngine;
     }
 
+    public static Tile getTileSelected(){
+        return selectedTile;
+    }
+
+    public static int getBoardSize(){
+        return boardSize;
+    }
+
+    public static ArrayList<Tile> getArrayTilesOnBoard(){
+        return ArrayTilesOnBoard;
+    }
+
+    public static void setTileSelected(Tile tile){
+        selectedTile = tile;
+    }
+
     public void setInitialGameParameters(int boardSize, int probAbbeys, int probCities, int probRoads, boolean addDirectionalRoads){
         this.boardSize = boardSize;
         this.probAbbeys = probAbbeys;
@@ -49,6 +65,7 @@ public class GameEngine {
         this.probRoads = probRoads;
         this.addDirectionalRoads = addDirectionalRoads;
         this.boardGame = BoardGUI.getGameBoard();
+        this.selectedTile = null;
 
         setGameScenario();
     }
