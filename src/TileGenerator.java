@@ -8,8 +8,10 @@ public class TileGenerator {
             newTile = new CityTile(typeTile, coords);
         }else if(typeTile.equals("road")){
             newTile = new RoadTile(typeTile, coords, withDirection);
-        }else{
+        }else if(typeTile.equals("empty")){
             newTile = new EmptyTile(typeTile, coords);
+        }else{
+            newTile = new DealtTile(typeTile, coords);
         }
         return newTile;
     }

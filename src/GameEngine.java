@@ -154,10 +154,14 @@ public class GameEngine {
         Tile tilesToPlay [] = new Tile[]{dealtTile(), dealtTile(), dealtTile(), dealtTile()};
         int index = 1;
         for(Tile tt : tilesToPlay){
-            tt.setName("dealt" + String.valueOf(index));
+            tt.setName("dealt" + index);
             lateralPanel.add(tt);
             index += 1;
         }
+        Tile discardTile = TileGenerator.getTile("dealt", new int[]{0,0}, addDirectionalRoads);
+        discardTile.setName("discard");
+        discardTile.setEnabled(false);
+        lateralPanel.add(discardTile);
     }
 
     private void setLayoutWindows(){
