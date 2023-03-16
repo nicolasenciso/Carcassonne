@@ -1,9 +1,8 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
+
 
 public class AbbeyTile extends Tile{
     public AbbeyTile(String typeTile, int[] coords) {

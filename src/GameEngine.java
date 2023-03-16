@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import java.util.*;
 
@@ -11,12 +12,11 @@ public class GameEngine {
     private static int numTurns = 0;
     private static int countAbbeys = 0;
     private static int countCities = 0;
-
-    private static String[] typeTiles = new String[]{"empty", "road", "abbey", "city"};
     private static GameEngine myGameEngine;
     private static JPanel gameGrid;
     private static JPanel lateralPanel;
     private static Tile selectedTile;
+    private static ArrayList<Tile> ArrayTilesOnBoard;
     private static Map<String, Serializable> probIntervals;
     private static int probAbbeys;
     private static int probCities;
@@ -52,28 +52,24 @@ public class GameEngine {
 
         setGameScenario();
     }
-
     public void setGameScenario(){
-
         setLayoutWindows();
         setGameGrid();
         setLateralPanel();
         setProbabilitiesIntervals();
         generateInitialTilesToPlay();
-
     }
 
     public static void startGame(){
-
         windowGUI gameWindow = windowGUI.getWindow();
         MenuGUI gameMenu = MenuGUI.getMenuGUI();
-
         gameWindow.add(gameMenu);
         gameWindow.pack();
         gameWindow.setWindowConfig();
     }
 
     private void setGameGrid(){
+        ArrayTilesOnBoard = new ArrayList<>();
         gameGrid = new JPanel();
         gameGrid.setLayout(new GridLayout(boardSize, boardSize));
         int x = 0;
@@ -86,13 +82,20 @@ public class GameEngine {
             }
             // case middle tile always a four-way road
             if(x == boardSize/2 && y == boardSize/2){
-                gameGrid.add(TileGenerator.getTile(typeTiles[1], new int[]{x, y}, false));
+                Tile middleTile = TileGenerator.getTile("road", new int[]{x, y}, false);
+                middleTile.setName("gameTile");
+                gameGrid.add(middleTile);
+                ArrayTilesOnBoard.add(middleTile);
             }else{
-                gameGrid.add(TileGenerator.getTile(typeTiles[0], new int[]{x, y}, addDirectionalRoads));
+                Tile gameTile = TileGenerator.getTile("empty", new int[]{x, y}, addDirectionalRoads);
+                gameTile.setName("gameTile");
+                gameGrid.add(gameTile);
+                ArrayTilesOnBoard.add(gameTile);
             }
             x += 1;
         }
         boardGame.add(gameGrid, BorderLayout.CENTER);
+        //Tile cc = (Tile) gameGrid.getComponent(10);
     }
 
     private void setLateralPanel(){
@@ -147,7 +150,6 @@ public class GameEngine {
             newTile = TileGenerator.getTile("abbey", new int[]{0,0}, addDirectionalRoads);
             countAbbeys += 1;
         }
-
         return newTile;
     }
     private void generateInitialTilesToPlay(){
