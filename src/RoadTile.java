@@ -1,35 +1,55 @@
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.FileInputStream;
+import java.io.Serializable;
+import java.util.Map;
+import static java.util.Map.entry;
+import java.util.Random;
+
 public class RoadTile extends Tile{
 
     private byte[] directions;
-    private enum DirectionsPairs {
-        RIGHT_LEFT("1,3"),
-        UP_DOWN("0,2"),
-        FOUR_WAY("0,1,2,3"),
-        THREE_WAY_1("0,1,3"),
-        THREE_WAY_2("0,1,2"),
-        THREE_WAY_3("1,2,3"),
-        THREE_WAY_4("0,2,3"),
-        CORNER_1("1,2"),
-        CORNER_2("2,3"),
-        CORNER_3("0,3"),
-        CORNER_4("0,1");
 
-        private String directions;
-        private DirectionsPairs(String directions){
-            this.directions = directions;
-        }
-        public String getDirections(){
-            return directions;
-        }
-
-    }
+    private Map<String, Serializable> Directions = Map.ofEntries(
+      entry("right-left.png", new byte[]{1,3}),
+      entry("up-down.png", new byte[]{0,2}),
+      entry("four-way.png", new byte[]{0,1,2,3}),
+      entry("three-way-1.png", new byte[]{0,1,3}),
+      entry("three-way-2.png", new byte[]{0,1,2}),
+      entry("three-way-3.png", new byte[]{1,2,3}),
+      entry("three-way-4.png", new byte[]{0,2,3}),
+      entry("corner-1.png", new byte[]{1,2}),
+      entry("corner-2.png", new byte[]{2,3}),
+      entry("corner-3.png", new byte[]{0,3}),
+      entry("corner-4.png", new byte[]{0,1})
+    );
     public RoadTile(String typeTile, int[] coords, boolean withDirection) {
         super(typeTile, coords);
         if(withDirection){
             // random selection of type road, all same probability
-            byte a = (byte)DirectionsPairs.values().length;
+            int randomNumber = new Random().nextInt(Directions.values().size());
+            String keyIcon = (String) Directions.keySet().toArray()[randomNumber];
+            this.directions = (byte[]) Directions.get(keyIcon);
+            try{
+                icon = ImageIO.read(new FileInputStream("assets/"+keyIcon));
+                icon = icon.getScaledInstance(tileWidth, tileHeight, Image.SCALE_DEFAULT);
+                this.setIcon(new ImageIcon(icon));
+            }catch (Exception e){
+                System.out.println(e);
+            }
+        }else{
+            try{
+                icon = ImageIO.read(new FileInputStream("assets/four-way.png"));
+                icon = icon.getScaledInstance(tileWidth, tileHeight, Image.SCALE_DEFAULT);
+                this.setIcon(new ImageIcon(icon));
+            }catch (Exception e){
+                System.out.println(e);
+            }
         }
+    }
 
-
+    public byte[] getDirections() {
+        return directions;
     }
 }

@@ -9,7 +9,6 @@ public class GameEngine {
     private static int numTurns = 0;
 
     private static String[] typeTiles = new String[]{"empty", "road", "abbey", "city"};
-    private static String[] typeRoads = new String[]{"right-left", "up-down", "four-way", "three-way", "corner"};
     private static GameEngine myGameEngine;
     private static JPanel gameGrid;
     private static JPanel lateralPanel;
@@ -70,7 +69,7 @@ public class GameEngine {
         gameGrid = new JPanel();
         gameGrid.setLayout(new GridLayout(boardSize, boardSize));
         for(int i = 0; i < boardSize*boardSize; i++){
-            gameGrid.add(TileGenerator.getTile(typeTiles[0],new int[]{1,1},false ));
+            gameGrid.add(TileGenerator.getTile(typeTiles[1],new int[]{1,1},false ));
         }
         boardGame.add(gameGrid, BorderLayout.CENTER);
     }
