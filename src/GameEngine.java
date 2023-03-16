@@ -76,11 +76,13 @@ public class GameEngine {
     private void setGameGrid(){
         gameGrid = new JPanel();
         gameGrid.setLayout(new GridLayout(boardSize, boardSize));
+        int x = 0;
+        int y = 0;
         for(int i = 0; i < boardSize*boardSize; i++){
             if(i==boardSize) {
-                gameGrid.add(TileGenerator.getTile(typeTiles[1], new int[]{1, 1}, false));
+                gameGrid.add(TileGenerator.getTile(typeTiles[1], new int[]{1, 1}, addDirectionalRoads));
             }else{
-                gameGrid.add(TileGenerator.getTile(typeTiles[0], new int[]{1, 1}, false));
+                gameGrid.add(TileGenerator.getTile(typeTiles[0], new int[]{1, 1}, addDirectionalRoads));
             }
         }
         boardGame.add(gameGrid, BorderLayout.CENTER);
@@ -90,9 +92,6 @@ public class GameEngine {
         lateralPanel = new JPanel();
         lateralPanel.setBorder(new EmptyBorder(10,10,10,10));
         lateralPanel.setLayout(new GridLayout(5,1));
-        for(int i = 0; i < 5; i++){
-            lateralPanel.add(TileGenerator.getTile(typeTiles[0], new int[]{1, 1}, false));
-        }
         boardGame.add(lateralPanel, BorderLayout.EAST);
     }
 
@@ -144,54 +143,14 @@ public class GameEngine {
 
         return newTile;
     }
-    private Tile[] generateInitialTilesToPlay(){
-        Tile tilesToPlay [] = new Tile[]{getProbTile(), getProbTile(), getProbTile(), getProbTile()};
-
-        ArrayList <Integer> indexAbbAndCity = new ArrayList<>();
-        int numCitiesToPlay = 0;
-        int numAbbeysToPlay = 0;
-
-        for(int i = 0; i < tilesToPlay.length; i++){
-            if(tilesToPlay[i].getTypeTile() == "abbey"){
-                numAbbeysToPlay += 1;
-                indexAbbAndCity.add(i);
-            }
-            if(tilesToPlay[i].getTypeTile() == "city"){
-                numCitiesToPlay += 1;
-                indexAbbAndCity.add(i);
-            }
+    private void generateInitialTilesToPlay(){
+        Tile tilesToPlay [] = new Tile[]{dealtTile(), dealtTile(), dealtTile(), dealtTile()};
+        int index = 1;
+        for(Tile tt : tilesToPlay){
+            tt.setName("dealt" + String.valueOf(index));
+            lateralPanel.add(tt);
+            index += 1;
         }
-
-        // check for 15 turns rule
-        Collections.sort(indexAbbAndCity);
-
-        // case less than 3 cities
-        if(numCitiesToPlay == 0){
-            if((numTurns == 5 && countCities == 0) ||
-                    (numTurns == 10 && countCities < 2) ||
-                    (numTurns == 14 && countCities < 3)){
-                Tile newCity = TileGenerator.getTile("city", new int[]{0,0}, addDirectionalRoads);
-                for(int i = 0; i < 4; i++){
-                    if(!indexAbbAndCity.contains(i)){
-                        tilesToPlay[i] = newCity;
-                        break;
-                    }
-                }
-                countCities += 1;
-            }
-        }
-        // case less than 1 abbey
-        if(numAbbeysToPlay == 0 && numTurns == 15 && countAbbeys == 0){
-            Tile newAbbey = TileGenerator.getTile("abbey", new int[]{0,0}, addDirectionalRoads);
-            for(int i = 0; i < 4; i++){
-                if(!indexAbbAndCity.contains(i)){
-                    tilesToPlay[i] = newAbbey;
-                    break;
-                }
-            }
-            countAbbeys += 1;
-        }
-        return tilesToPlay;
     }
 
     private void setLayoutWindows(){
@@ -199,11 +158,6 @@ public class GameEngine {
         boardGame.add(getEmptyPanel(false), BorderLayout.SOUTH);
         boardGame.add(getEmptyPanel(true), BorderLayout.WEST);
     }
-
-    public void addTurn(){
-        this.numTurns += 1;
-    }
-
 
     private static JPanel getEmptyPanel(boolean isVertical){
         JPanel emptyPanel = new JPanel();
