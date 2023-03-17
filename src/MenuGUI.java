@@ -179,7 +179,6 @@ public class MenuGUI extends JPanel implements ActionListener {
 
         if(e.getSource() == newGameButton){
 
-            // TODO: checker 100 for probabilities, till 30 on size board
             int probaAbbey = Integer.parseInt(probAbbeys.getText().trim());
             int probaCity = Integer.parseInt(probCities.getText().trim());
             int probaRoad = Integer.parseInt(probRoads.getText().trim());
@@ -192,8 +191,17 @@ public class MenuGUI extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(null,
                         "The board size has to be higher than 3",
                         "Too low board size", JOptionPane.ERROR_MESSAGE);
+            }else if(Integer.parseInt(sizeBoardTextField.getText()) > 30){
+                    JOptionPane.showMessageDialog(null,
+                            "The board size is too big",
+                            "Too big board size", JOptionPane.ERROR_MESSAGE);
+            }else if(Integer.parseInt(sizeBoardTextField.getText()) % 2 == 0){
+                JOptionPane.showMessageDialog(null,
+                        "The board size has to be odd",
+                        "Not odd size", JOptionPane.ERROR_MESSAGE);
             }else{
-                GameEngine.generateGameEngine().setInitialGameParameters(Integer.parseInt(sizeBoardTextField.getText().trim()),
+                GameEngine.generateGameEngine()
+                        .setInitialGameParameters(Integer.parseInt(sizeBoardTextField.getText().trim()),
                         probaAbbey, probaCity, probaRoad, addRouteDirection.isSelected());
 
             }

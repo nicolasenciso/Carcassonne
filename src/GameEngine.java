@@ -25,10 +25,10 @@ public class GameEngine {
     private static boolean addDirectionalRoads;
 
     final static int originalTileSize = 16;
-    final static int scale = 3;
-    final static int tileSize = originalTileSize * scale;
-    private static int screenWidth = tileSize * 30;
-    private static int screenHeight = tileSize * 21;
+    private static int scale=3;
+    private static int tileSize;
+    private static int screenWidth;
+    private static int screenHeight;
 
     private static BoardGUI boardGame;
 
@@ -79,6 +79,10 @@ public class GameEngine {
         this.addDirectionalRoads = addDirectionalRoads;
         this.boardGame = BoardGUI.getGameBoard();
         this.selectedTile = null;
+
+        this.tileSize = originalTileSize * scale;
+        this.screenWidth = (tileSize * 30);
+        this.screenHeight = (tileSize * 21);
 
         setGameScenario();
     }

@@ -6,14 +6,13 @@ import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 // Factory pattern
 public abstract class Tile extends JButton {
 
-    // TODO: automatic scale of tileSize depending of board size
     public String typeTile;
     public ActionButtonsController actioner;
-    public int scale = 5;
     public int tileWidth = 115;
     public String sourceImg;
     public int tileHeight = 80;
@@ -30,6 +29,17 @@ public abstract class Tile extends JButton {
         this.setAction(actioner);
         this.withDirections = false;
         this.directions = new int[]{};
+
+        if(GameEngine.getBoardSize() > 11 && GameEngine.getBoardSize() <= 21){
+            this.tileHeight -= 30;
+            this.tileWidth -= 30;
+        }else if(GameEngine.getBoardSize() > 21){
+            this.tileHeight -= 60;
+            this.tileWidth -= 60;
+        }else if(GameEngine.getBoardSize() < 11){
+            this.tileWidth += 30;
+            this.tileHeight += 30;
+        }
     }
 
     public void transferTile(){
@@ -83,9 +93,38 @@ public abstract class Tile extends JButton {
                 // north west
                 poss = getTileByCoords(new int[]{tile.coords[0] - 1, tile.coords[1] - 1});
                 if(poss != null && poss.typeTile != "empty"){ score += 1; }
+            }else if(tile.typeTile == "city"){
+                score += 2;
+                // BFS TRAVERSAL GRAPH
+                ArrayList<String> visited = new ArrayList<>();
+                LinkedList<Tile> queue = new LinkedList<>();
+                queue.add(tile);
+                while(queue.size() != 0){
+                    Tile s = queue.poll();
+                    visited.add(s.coords[0] + "," + s.coords[1]);
+                    for(Tile adj : getAdjTiles(s)){
+                        if(adj != null && adj.typeTile == "city" && !visited.contains(adj.coords[0] + "," + adj.coords[1])){
+                            visited.add(adj.coords[0] + "," + adj.coords[1]);
+                            score += 1;
+                            queue.add(adj);
+                        }
+                    }
+                }
+            }else if(tile.typeTile == "road"){
+                // roads already are chained accrding to directions
+                score += 1;
             }
         }
         return score;
+    }
+
+    private ArrayList<Tile> getAdjTiles(Tile tile){
+        ArrayList<Tile> adjs = new ArrayList<>();
+        adjs.add(getTileByCoords(new int[]{tile.coords[0], tile.coords[1] - 1}));
+        adjs.add(getTileByCoords(new int[]{tile.coords[0] + 1, tile.coords[1]}));
+        adjs.add(getTileByCoords(new int[]{tile.coords[0], tile.coords[1] + 1}));
+        adjs.add(getTileByCoords(new int[]{tile.coords[0] - 1, tile.coords[1]}));
+        return adjs;
     }
 
     private Tile getTileByCoords(int coords []){
@@ -114,7 +153,6 @@ public abstract class Tile extends JButton {
                     "No more empty tiles available. YOUR SCORE IS: " + getScore(),
                     "END OF GAME !", JOptionPane.INFORMATION_MESSAGE);
         }
-
         // cant play with given tiles
         ArrayList<Boolean> checkers = new ArrayList<>();
         for(Tile panelTile : GameEngine.getArrayTilesLateralPanel()){
@@ -122,7 +160,7 @@ public abstract class Tile extends JButton {
                 if(boardTile.typeTile == "empty"){
                     if(panelTile.typeTile.contains("abbey") || panelTile.typeTile.contains("city")){
                         if(validateAbbeyAndCity(boardTile)){
-                           checkers.add(true);
+                            checkers.add(true);
                         }else{
                             checkers.add(false);
                         }
@@ -142,6 +180,7 @@ public abstract class Tile extends JButton {
                     "Your tiles can't play. YOUR SCORE IS: " + getScore(),
                     "END OF GAME !", JOptionPane.INFORMATION_MESSAGE);
         }
+
     }
 
     private void replacePlayedTile(){
@@ -272,6 +311,7 @@ public abstract class Tile extends JButton {
             }else if(getName().contains("discard")){
                 checkEndGame();
                 resetTilesPanel();
+                checkEndGame();
             }else{
                 // game board tiles
                 if(!isOpaque() && GameEngine.getTileSelected() != null){
