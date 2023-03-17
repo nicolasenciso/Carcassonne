@@ -46,13 +46,26 @@ public abstract class Tile extends JButton {
             icon = icon.getScaledInstance(tileWidth, tileHeight, Image.SCALE_DEFAULT);
             this.setIcon(new ImageIcon(icon));
         }catch (Exception e){
-            System.out.println(e);
+            System.out.println("Error en transferTile, no existe " + sourceImg);
         }
-
-
         GameEngine.addOneTurn();
         turnManagement();
+        replacePlayedTile();
+    }
 
+    private void replacePlayedTile(){
+        ArrayList<String> tilesSpecs = new ArrayList<>();
+        for(Tile tile : GameEngine.getArrayTilesLateralPanel()){
+           if(tile.isOpaque()){
+               tilesSpecs.add("add");
+           }else if(!tile.isOpaque() && !tile.getName().contains("discard")){
+               tilesSpecs.add(tile.typeTile + "&" + tile.sourceImg);
+           }
+        }
+        GameEngine.generateTilesToPlay(tilesSpecs);
+        GameEngine.setTileSelected(null);
+        GameEngine.addOneTurn();
+        turnManagement();
     }
 
     private void turnManagement(){
@@ -141,8 +154,7 @@ public abstract class Tile extends JButton {
     }
 
     private void resetTilesPanel(){
-        GameEngine.setArrayTilesLateralPanel(new ArrayList<Tile>());
-        GameEngine.generateTilesToPlay();
+        GameEngine.generateTilesToPlay(null);
         GameEngine.setTileSelected(null);
     }
 

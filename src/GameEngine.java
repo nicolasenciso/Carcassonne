@@ -67,10 +67,6 @@ public class GameEngine {
         return ArrayTilesLateralPanel;
     }
 
-    public static void setArrayTilesLateralPanel(ArrayList<Tile> tiles){
-        ArrayTilesLateralPanel = tiles;
-    }
-
     public static void setTileSelected(Tile tile){
         selectedTile = tile;
     }
@@ -91,7 +87,7 @@ public class GameEngine {
         setGameGrid();
         setProbabilitiesIntervals();
         setLateralPanel();
-        generateTilesToPlay();
+        generateTilesToPlay(null);
     }
 
     public static void startGame(){
@@ -169,7 +165,7 @@ public class GameEngine {
         return null;
     }
 
-    private static Tile dealtTile(){
+    public static Tile dealtTile(){
         Tile newTile = getProbTile();
 
         // 15 turns rule
@@ -193,21 +189,49 @@ public class GameEngine {
         boardGame.add(lateralPanel, BorderLayout.EAST);
     }
 
-    public static void generateTilesToPlay(){
+    public static void generateTilesToPlay(ArrayList<String> tilesSpecs){
 
         for(Component comp : lateralPanel.getComponents()){
             if(comp instanceof JButton){ lateralPanel.remove(comp); }
         }
         lateralPanel.revalidate();
         lateralPanel.repaint();
-        Tile tilesToPlay [] = new Tile[]{dealtTile(), dealtTile(), dealtTile(), dealtTile()};
         ArrayTilesLateralPanel = new ArrayList<>();
         int index = 1;
-        for(Tile tt : tilesToPlay){
-            tt.setName("dealt" + index);
-            lateralPanel.add(tt);
-            ArrayTilesLateralPanel.add(tt);
-            index += 1;
+        if(tilesSpecs == null){
+            Tile tilesToPlay [] = new Tile[]{dealtTile(), dealtTile(), dealtTile(), dealtTile()};
+            for(Tile tt : tilesToPlay){
+                tt.setName("dealt" + index);
+                lateralPanel.add(tt);
+                ArrayTilesLateralPanel.add(tt);
+                index += 1;
+            }
+        }else{
+            for(String st : tilesSpecs){
+                Tile newTile = null;
+                if(st.contains("add")){
+                    newTile = dealtTile();
+                }else{
+                    String specs[] = st.split("&");
+                    if(specs[0].contains("abbey")){
+                        newTile = TileGenerator.getTile("abbey", new int[]{0,0}, addDirectionalRoads);
+                    }else if(specs[0].contains("city")){
+                        newTile = TileGenerator.getTile("city", new int[]{0,0}, addDirectionalRoads);
+                    }else{
+                        RoadTile newTile2 = new RoadTile("road", new int[]{0,0}, addDirectionalRoads);
+                        newTile2.resetConfigRoad(specs[1].split("/")[1]);
+                        newTile2.setName("dealt" + index);
+                        lateralPanel.add(newTile2);
+                        ArrayTilesLateralPanel.add(newTile2);
+                    }
+                }
+                if(newTile != null){
+                    newTile.setName("dealt" + index);
+                    lateralPanel.add(newTile);
+                    ArrayTilesLateralPanel.add(newTile);
+                }
+                index += 1;
+            }
         }
         Tile discardTile = TileGenerator.getTile("dealt", new int[]{0,0}, addDirectionalRoads);
         discardTile.setName("discard");

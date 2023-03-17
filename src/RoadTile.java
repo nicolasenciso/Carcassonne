@@ -38,7 +38,7 @@ public class RoadTile extends Tile{
                 icon = icon.getScaledInstance(tileWidth, tileHeight, Image.SCALE_DEFAULT);
                 this.setIcon(new ImageIcon(icon));
             }catch (Exception e){
-                System.out.println(e);
+                System.out.println("Error constructor RoadTile no existe " + sourceImg);
             }
         }else{
             this.sourceImg = "assets/four-way.png";
@@ -50,6 +50,18 @@ public class RoadTile extends Tile{
             }catch (Exception e){
                 System.out.println(e);
             }
+        }
+    }
+
+    public void resetConfigRoad(String sourceImg){
+        this.sourceImg = "assets/" + sourceImg;
+        this.directions = (int[]) Directions.get(sourceImg);
+        try{
+            icon = ImageIO.read(new FileInputStream(this.sourceImg.trim()));
+            icon = icon.getScaledInstance(tileWidth, tileHeight, Image.SCALE_DEFAULT);
+            this.setIcon(new ImageIcon(icon));
+        }catch (Exception e){
+            System.out.println("Error en resetConfigRoad no existe " + sourceImg);
         }
     }
 }
