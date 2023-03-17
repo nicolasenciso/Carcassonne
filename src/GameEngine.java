@@ -30,7 +30,7 @@ public class GameEngine {
     private static int screenWidth = tileSize * 30;
     private static int screenHeight = tileSize * 21;
 
-    private BoardGUI boardGame;
+    private static BoardGUI boardGame;
 
     private GameEngine(){
 
@@ -67,6 +67,10 @@ public class GameEngine {
         return ArrayTilesLateralPanel;
     }
 
+    public static void setArrayTilesLateralPanel(ArrayList<Tile> tiles){
+        ArrayTilesLateralPanel = tiles;
+    }
+
     public static void setTileSelected(Tile tile){
         selectedTile = tile;
     }
@@ -85,9 +89,9 @@ public class GameEngine {
     public void setGameScenario(){
         setLayoutWindows();
         setGameGrid();
-        setLateralPanel();
         setProbabilitiesIntervals();
-        generateInitialTilesToPlay();
+        setLateralPanel();
+        generateTilesToPlay();
     }
 
     public static void startGame(){
@@ -125,14 +129,12 @@ public class GameEngine {
             x += 1;
         }
         boardGame.add(gameGrid, BorderLayout.CENTER);
-        //Tile cc = (Tile) gameGrid.getComponent(10);
     }
 
-    private void setLateralPanel(){
-        lateralPanel = new JPanel();
-        lateralPanel.setBorder(new EmptyBorder(10,10,10,10));
-        lateralPanel.setLayout(new GridLayout(5,1));
-        boardGame.add(lateralPanel, BorderLayout.EAST);
+    public static void restartTurns(){
+        numTurns = 1;
+        countCities = 0;
+        countAbbeys = 0;
     }
 
 
@@ -156,7 +158,7 @@ public class GameEngine {
         }
     }
 
-    private Tile getProbTile(){
+    private static Tile getProbTile(){
         int randomNum = new Random().nextInt(100);
         if(randomNum <= 0){ randomNum = 50; }
         for(Map.Entry<String, Serializable> entry : probIntervals.entrySet()){
@@ -167,7 +169,7 @@ public class GameEngine {
         return null;
     }
 
-    private Tile dealtTile(){
+    private static Tile dealtTile(){
         Tile newTile = getProbTile();
 
         // 15 turns rule
@@ -183,7 +185,21 @@ public class GameEngine {
         }
         return newTile;
     }
-    private void generateInitialTilesToPlay(){
+
+    private static void setLateralPanel(){
+        lateralPanel = new JPanel();
+        lateralPanel.setBorder(new EmptyBorder(10,10,10,10));
+        lateralPanel.setLayout(new GridLayout(5,1));
+        boardGame.add(lateralPanel, BorderLayout.EAST);
+    }
+
+    public static void generateTilesToPlay(){
+
+        for(Component comp : lateralPanel.getComponents()){
+            if(comp instanceof JButton){ lateralPanel.remove(comp); }
+        }
+        lateralPanel.revalidate();
+        lateralPanel.repaint();
         Tile tilesToPlay [] = new Tile[]{dealtTile(), dealtTile(), dealtTile(), dealtTile()};
         ArrayTilesLateralPanel = new ArrayList<>();
         int index = 1;

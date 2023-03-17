@@ -4,6 +4,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 // Factory pattern
@@ -47,12 +48,26 @@ public abstract class Tile extends JButton {
         }catch (Exception e){
             System.out.println(e);
         }
+
+
         GameEngine.addOneTurn();
-        if(GameEngine.getNumTurns() == 5){
-            for(Tile tile : GameEngine.getArrayTilesLateralPanel()){
-                if(tile.getName() == "discard"){ tile.setEnabled(true); }
+        turnManagement();
+
+    }
+
+    private void turnManagement(){
+        // Discard tiles
+        for(Tile tile : GameEngine.getArrayTilesLateralPanel()){
+            if(tile.getName() == "discard"){
+                if(GameEngine.getNumTurns() % 5 == 0 && GameEngine.getNumTurns() != 0){
+                    tile.setEnabled(true);
+                }else{
+                    tile.setEnabled(false);
+                }
             }
         }
+        // restart counters turn 15
+        if(GameEngine.getNumTurns() == 16){ GameEngine.restartTurns(); }
     }
 
     private void validatePlacement(){
@@ -125,21 +140,29 @@ public abstract class Tile extends JButton {
         return false;
     }
 
+    private void resetTilesPanel(){
+        GameEngine.setArrayTilesLateralPanel(new ArrayList<Tile>());
+        GameEngine.generateTilesToPlay();
+        GameEngine.setTileSelected(null);
+    }
+
     private class ActionButtonsController extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
 
             // Using opaque as a flag to know a tile was selected only lateral panel ones
-            if(getName().contains("dealt")){
-                if(isOpaque()){
+            if (getName().contains("dealt")) {
+                if (isOpaque()) {
                     setBorder(BorderFactory.createEmptyBorder());
                     setOpaque(false);
                     GameEngine.setTileSelected(null);
-                }else if(!isOpaque() && GameEngine.getTileSelected() == null){
+                } else if (!isOpaque() && GameEngine.getTileSelected() == null) {
                     setBorder(new LineBorder(Color.GREEN, 8));
                     setOpaque(true);
                     GameEngine.setTileSelected((Tile) e.getSource());
                 }
+            }else if(getName().contains("discard")){
+                resetTilesPanel();
             }else{
                 // game board tiles
                 if(!isOpaque() && GameEngine.getTileSelected() != null){
