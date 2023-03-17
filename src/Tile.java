@@ -47,7 +47,12 @@ public abstract class Tile extends JButton {
         }catch (Exception e){
             System.out.println(e);
         }
-        // agregar modificar valor en arraylist de fichas
+        GameEngine.addOneTurn();
+        if(GameEngine.getNumTurns() == 5){
+            for(Tile tile : GameEngine.getArrayTilesLateralPanel()){
+                if(tile.getName() == "discard"){ tile.setEnabled(true); }
+            }
+        }
     }
 
     private void validatePlacement(){

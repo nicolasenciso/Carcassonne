@@ -17,6 +17,7 @@ public class GameEngine {
     private static JPanel lateralPanel;
     private static Tile selectedTile;
     private static ArrayList<Tile> ArrayTilesOnBoard;
+    private static ArrayList<Tile> ArrayTilesLateralPanel;
     private static Map<String, Serializable> probIntervals;
     private static int probAbbeys;
     private static int probCities;
@@ -46,12 +47,24 @@ public class GameEngine {
         return selectedTile;
     }
 
+    public static void addOneTurn(){
+        numTurns += 1;
+    }
+
+    public static int getNumTurns(){
+        return numTurns;
+    }
+
     public static int getBoardSize(){
         return boardSize;
     }
 
     public static ArrayList<Tile> getArrayTilesOnBoard(){
         return ArrayTilesOnBoard;
+    }
+
+    public static ArrayList<Tile> getArrayTilesLateralPanel(){
+        return ArrayTilesLateralPanel;
     }
 
     public static void setTileSelected(Tile tile){
@@ -172,15 +185,18 @@ public class GameEngine {
     }
     private void generateInitialTilesToPlay(){
         Tile tilesToPlay [] = new Tile[]{dealtTile(), dealtTile(), dealtTile(), dealtTile()};
+        ArrayTilesLateralPanel = new ArrayList<>();
         int index = 1;
         for(Tile tt : tilesToPlay){
             tt.setName("dealt" + index);
             lateralPanel.add(tt);
+            ArrayTilesLateralPanel.add(tt);
             index += 1;
         }
         Tile discardTile = TileGenerator.getTile("dealt", new int[]{0,0}, addDirectionalRoads);
         discardTile.setName("discard");
         discardTile.setEnabled(false);
+        ArrayTilesLateralPanel.add(discardTile);
         lateralPanel.add(discardTile);
     }
 
