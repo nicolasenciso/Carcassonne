@@ -188,6 +188,10 @@ public class MenuGUI extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(null,
                         "The sum of tile probabilities has to be 100",
                         "Probabilities do not sum 100", JOptionPane.ERROR_MESSAGE);
+            }else if(Integer.parseInt(sizeBoardTextField.getText()) < 3) {
+                JOptionPane.showMessageDialog(null,
+                        "The board size has to be higher than 3",
+                        "Too low board size", JOptionPane.ERROR_MESSAGE);
             }else{
                 GameEngine.generateGameEngine().setInitialGameParameters(Integer.parseInt(sizeBoardTextField.getText().trim()),
                         probaAbbey, probaCity, probaRoad, addRouteDirection.isSelected());

@@ -51,6 +51,52 @@ public abstract class Tile extends JButton {
         GameEngine.addOneTurn();
         turnManagement();
         replacePlayedTile();
+        checkEndGame();
+    }
+
+    private void checkEndGame(){
+
+        // no more empty tiles available
+        boolean emptyTilesAvailable = false;
+        for(Tile tile : GameEngine.getArrayTilesOnBoard()){
+            if(tile.typeTile == "empty"){
+                emptyTilesAvailable = true;
+                break;
+            }
+        }
+        if (!emptyTilesAvailable){
+            JOptionPane.showMessageDialog(null,
+                    "No more empty tiles available, END OF THE GAME !. YOUR SCORE IS : ",
+                    "No empty tiles", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        // cant play with given tiles
+        ArrayList<Boolean> checkers = new ArrayList<>();
+        for(Tile panelTile : GameEngine.getArrayTilesLateralPanel()){
+            for(Tile boardTile : GameEngine.getArrayTilesOnBoard()){
+                if(boardTile.typeTile == "empty"){
+                    if(panelTile.typeTile.contains("abbey") || panelTile.typeTile.contains("city")){
+                        if(validateAbbeyAndCity(boardTile)){
+                           checkers.add(true);
+                        }else{
+                            checkers.add(false);
+                        }
+                    }else{
+                        // case road
+                        if(validateRoad(panelTile, boardTile)){
+                            checkers.add(true);
+                        }else{
+                            checkers.add(false);
+                        }
+                    }
+                }
+            }
+        }
+        if (!checkers.contains((true))){
+            JOptionPane.showMessageDialog(null,
+                    "Your tiles can't play, END OF THE GAME !. YOUR SCORE IS : ",
+                    "Tiles can't play", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private void replacePlayedTile(){
@@ -85,20 +131,22 @@ public abstract class Tile extends JButton {
 
     private void validatePlacement(){
         if(GameEngine.getTileSelected().typeTile != "road") {
-            if(validateAbbeyAndCity()){
+            if(validateAbbeyAndCity(null)){
                 transferTile();
             }
         }else{
-            if(validateRoad()){
+            if(validateRoad(null, null)){
                 transferTile();
             }
         }
     }
 
-    private boolean validateAbbeyAndCity(){
-        if(this.typeTile == "empty"){
-            int x = this.coords[0];
-            int y = this.coords[1];
+    private boolean validateAbbeyAndCity(Tile currentTile){
+
+        if(currentTile == null){ currentTile = this; }
+        if(currentTile.typeTile == "empty"){
+            int x = currentTile.coords[0];
+            int y = currentTile.coords[1];
             for(Tile tile : GameEngine.getArrayTilesOnBoard()){
                 // check up, right, down and left
                 if(tile.typeTile != "empty"){
@@ -112,11 +160,14 @@ public abstract class Tile extends JButton {
         return false;
     }
 
-    private boolean validateRoad(){
-        if(this.typeTile == "empty"){
-            int x = this.coords[0];
-            int y = this.coords[1];
-            Tile selected = GameEngine.getTileSelected();
+    private boolean validateRoad(Tile selected, Tile currentTile){
+        if(currentTile == null){
+            currentTile = this;
+            selected = GameEngine.getTileSelected();;
+        }
+        if(currentTile.typeTile == "empty"){
+            int x = currentTile.coords[0];
+            int y = currentTile.coords[1];
             for(Tile tile : GameEngine.getArrayTilesOnBoard()){
                 // check up, right, down and left AND if road continues there (directions)
                 if(tile.typeTile == "road"){
@@ -174,6 +225,7 @@ public abstract class Tile extends JButton {
                     GameEngine.setTileSelected((Tile) e.getSource());
                 }
             }else if(getName().contains("discard")){
+                checkEndGame();
                 resetTilesPanel();
             }else{
                 // game board tiles
