@@ -145,6 +145,7 @@ public class GameEngine {
 
     private Tile getProbTile(){
         int randomNum = new Random().nextInt(100);
+        if(randomNum <= 0){ randomNum = 50; }
         for(Map.Entry<String, Serializable> entry : probIntervals.entrySet()){
             if(((int [])entry.getValue())[0] <= randomNum  &&  randomNum <= ((int[]) entry.getValue())[1]){
                 return TileGenerator.getTile(entry.getKey(), new int[]{0,0}, addDirectionalRoads);

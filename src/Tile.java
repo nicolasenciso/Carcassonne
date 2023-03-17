@@ -4,6 +4,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
+import java.util.Arrays;
 
 // Factory pattern
 public abstract class Tile extends JButton {
@@ -17,7 +18,7 @@ public abstract class Tile extends JButton {
     public int tileHeight = 80;
     public int[] coords;
     public boolean withDirections;
-    public byte[] directions;
+    public int[] directions;
     public Image icon;
 
     public Tile(String typeTile, int[] coords){
@@ -27,6 +28,7 @@ public abstract class Tile extends JButton {
         actioner = new ActionButtonsController();
         this.setAction(actioner);
         this.withDirections = false;
+        this.directions = new int[]{};
     }
 
     public void transferTile(){
@@ -49,31 +51,71 @@ public abstract class Tile extends JButton {
     }
 
     private void validatePlacement(){
-        switch (GameEngine.getTileSelected().typeTile){
-            case "abbey":
-                if(validateAbbey()){ transferTile(); }
-                break;
-            case "road":
-                break;
-            case "city":
-                break;
+        if(GameEngine.getTileSelected().typeTile != "road") {
+            if(validateAbbeyAndCity()){
+                transferTile();
+            }
+        }else{
+            if(validateRoad()){
+                transferTile();
+            }
         }
     }
 
-    private boolean validateAbbey(){
+    private boolean validateAbbeyAndCity(){
         if(this.typeTile == "empty"){
             int x = this.coords[0];
             int y = this.coords[1];
             for(Tile tile : GameEngine.getArrayTilesOnBoard()){
                 // check up, right, down and left
                 if(tile.typeTile != "empty"){
-                    if((tile.coords[0] == x) && (tile.coords[1] == y + 1)){ return true; }
-                    if((tile.coords[0] == x + 1) && (tile.coords[1] == y)){ return true; }
                     if((tile.coords[0] == x) && (tile.coords[1] == y - 1)){ return true; }
+                    if((tile.coords[0] == x + 1) && (tile.coords[1] == y)){ return true; }
+                    if((tile.coords[0] == x) && (tile.coords[1] == y + 1)){ return true; }
                     if((tile.coords[0] == x - 1) && (tile.coords[1] == y)){ return true; }
                 }
-
             }
+        }
+        return false;
+    }
+
+    private boolean validateRoad(){
+        if(this.typeTile == "empty"){
+            int x = this.coords[0];
+            int y = this.coords[1];
+            Tile selected = GameEngine.getTileSelected();
+            for(Tile tile : GameEngine.getArrayTilesOnBoard()){
+                // check up, right, down and left AND if road continues there (directions)
+                if(tile.typeTile == "road"){
+                    if((tile.coords[0] == x) && (tile.coords[1] == y - 1) &&
+                            (containsNum(selected.directions, 0)) &&
+                            (containsNum(tile.directions, 2))){
+                        return true;
+
+                    }else if((tile.coords[0] == x + 1) && (tile.coords[1] == y) &&
+                            (containsNum(selected.directions, 1))  &&
+                            (containsNum(tile.directions, 3))){
+                        return true;
+
+                    }else if((tile.coords[0] == x) && (tile.coords[1] == y + 1) &&
+                            (containsNum(selected.directions, 2))  &&
+                            (containsNum(tile.directions, 0))){
+                        return true;
+
+                    }else if((tile.coords[0] == x - 1) && (tile.coords[1] == y) &&
+                            (containsNum(selected.directions, 3))  &&
+                            (containsNum(tile.directions, 1))){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean containsNum(int array[], int num){
+        for(int i = 0; i < array.length; i++){
+            if(array[i] == num){ return true; }
         }
         return false;
     }
