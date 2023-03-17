@@ -54,6 +54,51 @@ public abstract class Tile extends JButton {
         checkEndGame();
     }
 
+    private int getScore(){
+        int score = 0;
+        for(Tile tile : GameEngine.getArrayTilesOnBoard()){
+            if(tile.typeTile == "abbey"){
+                Tile poss = null;
+                // north
+                poss = getTileByCoords(new int[]{tile.coords[0], tile.coords[1] - 1});
+                if(poss != null && poss.typeTile != "empty"){ score += 1; }
+                // north - east
+                poss = getTileByCoords(new int[]{tile.coords[0] + 1, tile.coords[1] - 1});
+                if(poss != null && poss.typeTile != "empty"){ score += 1; }
+                // east
+                poss = getTileByCoords(new int[]{tile.coords[0] + 1, tile.coords[1]});
+                if(poss != null && poss.typeTile != "empty"){ score += 1; }
+                // south - east
+                poss = getTileByCoords(new int[]{tile.coords[0] + 1, tile.coords[1] - 1});
+                if(poss != null && poss.typeTile != "empty"){ score += 1; }
+                // south
+                poss = getTileByCoords(new int[]{tile.coords[0], tile.coords[1] + 1});
+                if(poss != null && poss.typeTile != "empty"){ score += 1; }
+                // south west
+                poss = getTileByCoords(new int[]{tile.coords[0] - 1, tile.coords[1] - 1});
+                if(poss != null && poss.typeTile != "empty"){ score += 1; }
+                // west
+                poss = getTileByCoords(new int[]{tile.coords[0] - 1, tile.coords[1]});
+                if(poss != null && poss.typeTile != "empty"){ score += 1; }
+                // north west
+                poss = getTileByCoords(new int[]{tile.coords[0] - 1, tile.coords[1] - 1});
+                if(poss != null && poss.typeTile != "empty"){ score += 1; }
+            }
+        }
+        return score;
+    }
+
+    private Tile getTileByCoords(int coords []){
+        Tile getTile = null;
+        for(Tile tile : GameEngine.getArrayTilesOnBoard()){
+            if(tile.coords[0] == coords[0] && tile.coords[1] == coords[1]){
+                getTile = tile;
+                break;
+            }
+        }
+        return getTile;
+    }
+
     private void checkEndGame(){
 
         // no more empty tiles available
@@ -66,8 +111,8 @@ public abstract class Tile extends JButton {
         }
         if (!emptyTilesAvailable){
             JOptionPane.showMessageDialog(null,
-                    "No more empty tiles available, END OF THE GAME !. YOUR SCORE IS : ",
-                    "No empty tiles", JOptionPane.INFORMATION_MESSAGE);
+                    "No more empty tiles available. YOUR SCORE IS: " + getScore(),
+                    "END OF GAME !", JOptionPane.INFORMATION_MESSAGE);
         }
 
         // cant play with given tiles
@@ -94,8 +139,8 @@ public abstract class Tile extends JButton {
         }
         if (!checkers.contains((true))){
             JOptionPane.showMessageDialog(null,
-                    "Your tiles can't play, END OF THE GAME !. YOUR SCORE IS : ",
-                    "Tiles can't play", JOptionPane.INFORMATION_MESSAGE);
+                    "Your tiles can't play. YOUR SCORE IS: " + getScore(),
+                    "END OF GAME !", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
