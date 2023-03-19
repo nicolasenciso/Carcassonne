@@ -1,7 +1,7 @@
 # Carcassonne
 Custom game Carcassonne simple implementation
 
-*Description:
+# Description:
 Carcassonne is a game in which a single player attempts to build a map within the limits of a
 board using squared tiles. The map will be constituted by tiles representing roads, abbeys and
 cities. Each of these types of tiles give certain number of points to the player. The goal is for the
