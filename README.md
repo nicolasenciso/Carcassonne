@@ -33,7 +33,7 @@ tiles. City chains award an extra point for each city in the chain
 cities, and abbeys should be scarce. No fifteen (15) turns can happen without an abbey and at
 least three (3) cities. How this is done is up to the implementor.
 
-OPTIONS ADDED:
+# OPTIONS ADDED:
 -You can add direction to road tiles, so each road tile indicates in which way must the road
 grow: right-left, up-down, four-way crossing, three-way crossing, or corner tile. The game must
 start with a four-way crossing road tile in the center
